@@ -99,5 +99,31 @@ export default defineConfig({
 })
 ```
 
+4.  **Production**
+
+```bash
+# ------------------------------------------------------------------------------
+# default.conf
+# ------------------------------------------------------------------------------
+
+<VirtualHost *:80>
+    ServerAlias *.${DOMAIN}
+    DocumentRoot ${APACHE_SHARED_ROOT}/projects/my-app/dist
+
+    <Directory ${APACHE_SHARED_ROOT}/projects/my-app/dist>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/my-app_error.log
+    CustomLog ${APACHE_LOG_DIR}/my-app_access.log combined
+</VirtualHost>
+```
+
+```bash
+yarn build
+```
+
 
 **License**: [MIT](LICENSE)
