@@ -1,87 +1,77 @@
-![Alt text](www/html/assets/images/screenshot.png)
-
 # dockBox
-DockBox is a simple local development environment based on Docker, designed to facilitate web development across multiple platforms.
+**Simple & Ready-to-Code Docker Environment**
 
-> PHP - Apache - MariaDB - sqlsrv/pdo_sqlsrv extensions
+A lightweight, pre-configured LAMP stack + Node.js environment.  
+Ideal for React/Vue frontends communicating with PHP backends in a single container.
 
-> Git - Composer - Node.js - Npm - Yarn - Vite
+### 🚀 Tech Stack
+*   **PHP 8.4** (Latest)
+*   **Apache** (Web Server)
+*   **MariaDB** (Latest)
+*   **Node.js 24.x** (LTS) + **npm/yarn**
+*   **Composer**
+*   **Git**
 
-<!-- ----------------------------------------------------------------------- -->
+---
 
-## Installation
+## 🛠 Installation
+
 ```bash
-git clone https://github.com/rocco-giandomenico/dockBox.git
+# 1. Clone the repository
+git clone https://github.com/rocco-giandomenico/default_container.git dockBox
+
+# 2. Enter directory
 cd dockBox
+
+# 3. Create .env file
 cp sample.env .env
-docker compose up -d
-```
-Go to dashboard -> http://localhost/
 
-### Container Shell
+# 4. Start Containers
+docker compose up -d --build
+```
+
+Your environment is now running at: **[http://localhost](http://localhost)**
+
+---
+
+## 💻 Usage
+
+### Directory Structure
+*   **`www/html`**: This is your web root (`http://localhost`).
+    *   Place your **Frontend** build here (e.g., `index.html`, `dist/`).
+    *   Place your **Backend API** here (e.g., `api/index.php`).
+
+### Access Container Shell
+To run commands like `composer install`, `npm install`, or `php artisan`:
 ```bash
-docker compose exec --user dockbox webserver bash
+docker compose exec --user ivert webserver bash
 ```
-![Alt text](www/html/assets/images/container_shell.png)
+*(Replace `ivert` with the username defined in your `.env` file)*
 
-<!-- ----------------------------------------------------------------------- -->
+---
 
-## Create Vue or React Apps
-```bash
-$ yarn create vite my-app --template vue
-$ yarn create vite my-app --template react
-```
-### Development
-```bash
-cd my-app
-yarn
-yarn dev
-```
-```js
-// -----------------------------------------------------------------------------
-// vite.config.js
-// -----------------------------------------------------------------------------
+## 🔧 Configuration
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+*   **MySQL/MariaDB**:
+    *   Host: `database`
+    *   User/Pass: Defined in `.env` (Default: `docker`/`docker`)
+*   **PHP Config**: `./config/php/php.ini`
+*   **Apache Config**: `./config/vhosts/default.conf`
 
-export default defineConfig({
-  plugins: [vue()],
-  server: {
-    host: '0.0.0.0',
-    port: 5173
-  }
-})
-```
-### Build
-```conf
+---
 
-# ------------------------------------------------------------------------------
-# default.conf
-# ------------------------------------------------------------------------------
+## 📦 React/Vue Setup (Example)
 
-<VirtualHost *:80>
-    ServerAlias *.${DOMAIN}
-    DocumentRoot ${APACHE_SHARED_ROOT}/projects/my-app/dist
+1.  **Enter Shell**: `docker compose exec --user ivert webserver bash`
+2.  **Create App**: `npm create vite@latest my-app -- --template react`
+3.  **Dev Server**:
+    *   In `vite.config.js`, set `server: { host: '0.0.0.0', port: 5173 }`.
+    *   Run `npm run dev`.
+    *   Access at `http://localhost:5173`.
+4.  **Production**:
+    *   Run `npm run build`.
+    *   The `dist/` folder will be served appropriately if placed in `www/html`.
 
-    <Directory ${APACHE_SHARED_ROOT}/projects/my-app/dist>
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
+---
 
-    ErrorLog ${APACHE_LOG_DIR}/my-app_error.log
-    CustomLog ${APACHE_LOG_DIR}/my-app_access.log combined
-</VirtualHost>
-```
-```bash
-yarn build
-```
-
-
-
-<!-- ----------------------------------------------------------------------- -->
-
-## License
-
-**[MIT License](https://github.com/rocco-giandomenico/dockBox?tab=MIT-1-ov-file)**
+**License**: [MIT](LICENSE)
