@@ -27,7 +27,7 @@ cd dockBox
 cp sample.env .env
 
 # 4. Start Containers
-docker compose up -d --build
+docker compose up -d
 ```
 
 Your environment is now running at: **[http://localhost](http://localhost)**
@@ -62,16 +62,42 @@ docker compose exec --user ivert webserver bash
 
 ## 📦 React/Vue Setup (Example)
 
-1.  **Enter Shell**: `docker compose exec --user ivert webserver bash`
-2.  **Create App**: `npm create vite@latest my-app -- --template react`
-3.  **Dev Server**:
-    *   In `vite.config.js`, set `server: { host: '0.0.0.0', port: 5173 }`.
-    *   Run `npm run dev`.
-    *   Access at `http://localhost:5173`.
-4.  **Production**:
-    *   Run `npm run build`.
-    *   The `dist/` folder will be served appropriately if placed in `www/html`.
+1.  **Enter Shell**
 
----
+```bash
+docker compose exec --user ivert webserver bash
+```
+2.  **Create App**
+
+```bash
+$ yarn create vite my-app --template vue
+$ yarn create vite my-app --template react
+```
+
+3.  **Dev Server**
+
+```bash
+$ cd my-app
+$ yarn
+$ yarn dev
+```
+
+```bash
+// -----------------------------------------------------------------------------
+// vite.config.js
+// -----------------------------------------------------------------------------
+
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+  plugins: [vue()],
+  server: {
+    host: '0.0.0.0',
+    port: 5173
+  }
+})
+```
+
 
 **License**: [MIT](LICENSE)
